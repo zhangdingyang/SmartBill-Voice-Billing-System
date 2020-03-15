@@ -27,6 +27,7 @@ public class BillMainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_bill_main);
         ButterKnife.bind(this);
+        initFragment();
     }
 
     private void initFragment()
