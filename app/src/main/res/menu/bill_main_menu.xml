@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <item
+        android:id="@+id/id1"
+        android:icon="@mipmap/ic_drawer_assignment_grey600_36dp"
+        android:title="账本主页" />
+    <item
+        android:id="@+id/id2"
+        android:icon="@mipmap/ic_drawer_assignment_grey600_36dp"
+        android:title="数据" />
+    <item
+        android:id="@+id/id3"
+        android:icon="@mipmap/ic_drawer_friends"
+        android:title="关注" />
+    <item
+        android:id="@+id/id4"
+        android:icon="@mipmap/ic_drawer_settings"
+        android:title="我的" />
+
+</menu>
