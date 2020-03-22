@@ -32,7 +32,6 @@
             </intent-filter>
         </activity>
         <activity android:name=".Activity.UserSignUpOrLoginSmsActivity"/>
-        <activity android:name=".Activity.UserMainActivity"/>
         <activity android:name=".Activity.UserLoginPasswordActivity"/>
         <activity android:name=".Activity.UserSignUpPasswordActivity"/>
         <activity android:name=".Activity.BillMainActivity"/>

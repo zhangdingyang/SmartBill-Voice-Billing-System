@@ -17,10 +17,11 @@ public class BillMainActivity extends AppCompatActivity {
     private BottomNavigationView bottomNavigationView;
     private BillHomeFragment billHomeFragment;
     private BillStatFragment billStatFragment;
+    private BillAddFragment billAddFragment;
     private BillFocusFragment billFocusFragment;
     private BillMeFragment billMeFragment;
     private Fragment[] fragments;
-    private int lastfragment;//用于记录上个选择的Fragment
+    private int lastFragment;//用于记录上个选择的Fragment
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -34,10 +35,11 @@ public class BillMainActivity extends AppCompatActivity {
     {
         billHomeFragment = new BillHomeFragment();
         billStatFragment = new BillStatFragment();
+        billAddFragment = new BillAddFragment();
         billFocusFragment = new BillFocusFragment();
         billMeFragment = new BillMeFragment();
-        fragments = new Fragment[]{billHomeFragment, billStatFragment, billFocusFragment, billMeFragment};
-        lastfragment=0;
+        fragments = new Fragment[]{billHomeFragment, billStatFragment, billAddFragment, billFocusFragment, billMeFragment};
+        lastFragment =0;
         getSupportFragmentManager().beginTransaction().replace(R.id.mainview, billHomeFragment).show(billHomeFragment).commit();
         bottomNavigationView=(BottomNavigationView)findViewById(R.id.bnv);
 
@@ -52,37 +54,46 @@ public class BillMainActivity extends AppCompatActivity {
             {
                 case R.id.id1:
                 {
-                    if(lastfragment!=0)
+                    if(lastFragment !=0)
                     {
-                        switchFragment(lastfragment,0);
-                        lastfragment=0;
+                        switchFragment(lastFragment,0);
+                        lastFragment =0;
                     }
                     return true;
                 }
                 case R.id.id2:
                 {
-                    if(lastfragment!=1)
+                    if(lastFragment !=1)
                     {
-                        switchFragment(lastfragment,1);
-                        lastfragment=1;
+                        switchFragment(lastFragment,1);
+                        lastFragment =1;
                     }
                     return true;
                 }
                 case R.id.id3:
                 {
-                    if(lastfragment!=2)
+                    if(lastFragment !=2)
                     {
-                        switchFragment(lastfragment,2);
-                        lastfragment=2;
+                        switchFragment(lastFragment,2);
+                        lastFragment =2;
                     }
                     return true;
                 }
                 case R.id.id4:
                 {
-                    if(lastfragment!=3)
+                    if(lastFragment !=3)
                     {
-                        switchFragment(lastfragment,3);
-                        lastfragment=3;
+                        switchFragment(lastFragment,3);
+                        lastFragment =3;
+                    }
+                    return true;
+                }
+                case R.id.id5:
+                {
+                    if(lastFragment !=4)
+                    {
+                        switchFragment(lastFragment,4);
+                        lastFragment =4;
                     }
                     return true;
                 }
