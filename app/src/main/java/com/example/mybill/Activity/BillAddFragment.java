@@ -218,12 +218,12 @@ public class BillAddFragment extends Fragment{
                     Toast.makeText(getActivity(),"未选择交易方式",Toast.LENGTH_SHORT).show();
                     return;
                 }
-                if (edt_amount.getText().equals("")){
-                    Toast.makeText(getActivity(),"",Toast.LENGTH_SHORT).show();
+                if (edt_amount.getText().toString().equals("")){
+                    Toast.makeText(getActivity(),"未输入金额",Toast.LENGTH_SHORT).show();
                     return;
                 }
-                if (edt_title.getText().equals("")){
-                    Toast.makeText(getActivity(),"",Toast.LENGTH_SHORT).show();
+                if (edt_title.getText().toString().equals("")){
+                    Toast.makeText(getActivity(),"未输入标题",Toast.LENGTH_SHORT).show();
                     return;
                 }
 
