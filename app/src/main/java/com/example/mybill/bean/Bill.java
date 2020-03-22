@@ -5,10 +5,11 @@ import cn.bmob.v3.datatype.BmobDate;
 
 public class Bill extends BmobObject {
     BmobDate date;
-    User user;
+    User userId;
     String type;
     Category categoryId;
     PaymentMethod paymentMethod;
+    Integer amount;
     String title;
     String comment;
 
@@ -44,6 +45,14 @@ public class Bill extends BmobObject {
         this.paymentMethod = paymentMethod;
     }
 
+    public Integer getAmount() {
+        return amount;
+    }
+
+    public void setAmount(Integer amount) {
+        this.amount = amount;
+    }
+
     public String getTitle() {
         return title;
     }
@@ -60,11 +69,11 @@ public class Bill extends BmobObject {
         this.comment = comment;
     }
 
-    public User getUser() {
-        return user;
+    public User getUserId() {
+        return userId;
     }
 
-    public void setUser(User user) {
-        this.user = user;
+    public void setUserId(User userId) {
+        this.userId = userId;
     }
 }

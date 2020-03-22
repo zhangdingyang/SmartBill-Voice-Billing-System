@@ -79,7 +79,7 @@
                 android:layout_height="wrap_content"
                 android:layout_margin="16dp"
                 android:hint="金额"
-                android:inputType="text" />
+                android:inputType="number" />
 
             <EditText
                 android:id="@+id/edt_title"
