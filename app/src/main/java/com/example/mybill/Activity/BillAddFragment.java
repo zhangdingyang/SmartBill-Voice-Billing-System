@@ -202,7 +202,7 @@ public class BillAddFragment extends Fragment{
                 edt_comment = getActivity().findViewById(R.id.edt_comment);
 
                 //检查表单完整性
-                if (text_date.getText().equals("未选择日期")){
+                if (text_date.getText().toString().equals("未选择日期")){
                     Toast.makeText(getActivity(),"未选择日期",Toast.LENGTH_SHORT).show();
                     return;
                 }

@@ -44,7 +44,6 @@
                     android:layout_margin="16dp"
                     android:text="发生日期"
                     app:layout_constraintEnd_toEndOf="parent"
-                    app:layout_constraintStart_toEndOf="@+id/text_date"
                     app:layout_constraintTop_toTopOf="parent" />
 
                 <TextView
@@ -63,7 +62,6 @@
                     android:hint="交易方式"
                     android:inputType="text"
                     app:layout_constraintEnd_toEndOf="parent"
-                    app:layout_constraintStart_toEndOf="@+id/textView3"
                     app:layout_constraintTop_toBottomOf="@+id/edt_date" />
 
                 <TextView
@@ -77,13 +75,12 @@
 
                 <Spinner
                     android:id="@+id/edt_category"
-                    android:layout_width="299dp"
+                    android:layout_width="311dp"
                     android:layout_height="24dp"
                     android:layout_margin="16dp"
                     android:hint="支出/收入类别"
                     android:inputType="text"
                     app:layout_constraintEnd_toEndOf="parent"
-                    app:layout_constraintStart_toEndOf="@+id/textView4"
                     app:layout_constraintTop_toBottomOf="@+id/edt_type" />
 
                 <TextView
@@ -98,12 +95,11 @@
                 <Spinner
                     android:id="@+id/edt_type"
                     android:layout_width="311dp"
-                    android:layout_height="23dp"
+                    android:layout_height="24dp"
                     android:layout_margin="16dp"
                     android:hint="账单类型"
                     android:inputType="text"
                     app:layout_constraintEnd_toEndOf="parent"
-                    app:layout_constraintStart_toEndOf="@+id/textView5"
                     app:layout_constraintTop_toBottomOf="@+id/edt_paymentMethod" />
 
             </android.support.constraint.ConstraintLayout>
