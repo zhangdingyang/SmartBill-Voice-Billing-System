@@ -10,7 +10,10 @@ import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
+import android.widget.CompoundButton;
 import android.widget.ListView;
+import android.widget.Spinner;
+import android.widget.Switch;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -34,7 +37,19 @@ import cn.bmob.v3.listener.FindListener;
 
 public class BillHomeFragment extends Fragment {
     ListView listView;
+
+    Switch inOrOutSwitch;
+
+    Spinner spinner_length;
+
+    List<String> lengthData;
+    List<Bill> listData;
+
     ArrayAdapter<Bill> billArrayAdapter;
+    ArrayAdapter lengthAdapter;
+
+    String inOrOut;
+    boolean isToday;
 
     @Nullable
     @Override
@@ -47,10 +62,49 @@ public class BillHomeFragment extends Fragment {
     public void onActivityCreated(@Nullable Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
 
-        List<Bill> listData = getBillData();
-        ArrayAdapter<Bill> adapter = new BillAdapter(getActivity(), R.layout.bill_item, listData);
-        listView = getActivity().findViewById(R.id.billListView);
-        listView.setAdapter(adapter);
+        //默认筛选条件
+        inOrOut = "in";
+        isToday = false;
+
+        //收入支出选择初始化
+        inOrOutSwitch = getActivity().findViewById(R.id.switch_in_out);
+        inOrOutSwitch.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+            @Override
+            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+                if (isChecked)
+                    inOrOut = "out";
+                else
+                    inOrOut = "in";
+                initListView();
+            }
+        });
+
+        //时间选择器初始化
+        spinner_length = getActivity().findViewById(R.id.spinner_length);
+        lengthData = new ArrayList<String>();
+        lengthData.add("近一年");
+        lengthData.add("今日");
+        lengthAdapter = new ArrayAdapter(getActivity(), android.R.layout.simple_list_item_1, lengthData);
+        lengthAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+        spinner_length.setAdapter(lengthAdapter);
+        spinner_length.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+            @Override
+            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+                if (lengthData.get(position).equals("近一年"))
+                    isToday = false;
+                else if (lengthData.get(position).equals("今日"))
+                    isToday = true;
+                initListView();
+            }
+
+            @Override
+            public void onNothingSelected(AdapterView<?> parent) {
+                Toast.makeText(getActivity(),"选择时间范围出错",Toast.LENGTH_SHORT).show();
+            }
+        });
+
+        //列表初始化
+        initListView();
 
         //单击一行数据的事件
         listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
@@ -70,13 +124,29 @@ public class BillHomeFragment extends Fragment {
 
     }
 
-    private List<Bill> getBillData(){
+    //列表初始化
+    private void initListView() {
+        listData = getBillData(inOrOut, isToday);
+        ArrayAdapter<Bill> adapter = new BillAdapter(getActivity(), R.layout.bill_item, listData);
+        listView = getActivity().findViewById(R.id.billListView);
+        listView.setAdapter(adapter);
+    }
+
+    //根据条件查询相应的账本
+    private List<Bill> getBillData(String inOrOut, boolean isToday){
         final List<Bill> bills = new ArrayList<>();
         Calendar calendar = Calendar.getInstance();
 
         BmobQuery<Bill> bmobQuery = new BmobQuery<Bill>();
         bmobQuery.addWhereEqualTo("userId", BmobUser.getCurrentUser().getObjectId());
-        bmobQuery.addWhereGreaterThan("createdAt", new BmobDate(new Date(calendar.get(Calendar.YEAR-1), calendar.get(Calendar.MONTH), calendar.get(Calendar.DAY_OF_MONTH))));
+        if (isToday)
+            bmobQuery.addWhereEqualTo("date", new BmobDate(new Date(calendar.get(Calendar.YEAR), calendar.get(Calendar.MONTH), calendar.get(Calendar.DAY_OF_MONTH))));
+        else
+            bmobQuery.addWhereGreaterThan("date", new BmobDate(new Date(calendar.get(Calendar.YEAR-1), calendar.get(Calendar.MONTH), calendar.get(Calendar.DAY_OF_MONTH))));
+        if (inOrOut.equals("out"))
+            bmobQuery.addWhereEqualTo("type", "out");
+        else if (inOrOut.equals("in"))
+            bmobQuery.addWhereEqualTo("type", "in");
         bmobQuery.findObjects(new FindListener<Bill>() {
             @Override
             public void done(List<Bill> list, BmobException e) {

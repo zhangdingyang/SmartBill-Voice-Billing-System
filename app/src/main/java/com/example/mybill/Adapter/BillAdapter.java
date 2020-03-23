@@ -11,8 +11,14 @@ import android.widget.TextView;
 
 import com.example.mybill.R;
 import com.example.mybill.bean.Bill;
+import com.example.mybill.bean.Category;
+import com.example.mybill.bean.PaymentMethod;
 
 import java.util.List;
+
+import cn.bmob.v3.BmobQuery;
+import cn.bmob.v3.exception.BmobException;
+import cn.bmob.v3.listener.QueryListener;
 
 public class BillAdapter extends ArrayAdapter<Bill> {
     private int resourceId;
@@ -24,11 +30,11 @@ public class BillAdapter extends ArrayAdapter<Bill> {
 
     @Override
     public View getView(int position, View convertView, ViewGroup parent){
-        Bill bill = getItem(position); //获取当前项的Fruit实例
+        final Bill bill = getItem(position); //获取当前项的实例
 
         // 加个判断，以免ListView每次滚动时都要重新加载布局，以提高运行效率
         View view;
-        ViewHolder viewHolder;
+        final ViewHolder viewHolder;
         if (convertView == null){
 
             // 避免ListView每次滚动时都要重新加载布局，以提高运行效率
@@ -39,6 +45,7 @@ public class BillAdapter extends ArrayAdapter<Bill> {
             viewHolder.date = view.findViewById(R.id.text_date);
             viewHolder.type = view.findViewById(R.id.text_type);
             viewHolder.category = view.findViewById(R.id.text_category);
+            viewHolder.paymentMethod = view.findViewById(R.id.text_paymentMethod);
             viewHolder.amount = view.findViewById(R.id.text_amount);
             viewHolder.title = view.findViewById(R.id.text_title);
 
@@ -50,9 +57,22 @@ public class BillAdapter extends ArrayAdapter<Bill> {
         }
 
         // 获取控件实例，并调用set...方法使其显示出来
-        viewHolder.date.setText(bill.getDate().getDate());
-        viewHolder.type.setText(bill.getType());
-        viewHolder.category.setText(bill.getCategoryId().getName());
+        viewHolder.date.setText(bill.getDate().getDate().split(" ")[0]);
+        viewHolder.type.setText(bill.getType() + "\t");
+        new BmobQuery<Category>().getObject(bill.getCategoryId().getObjectId(), new QueryListener<Category>() {
+            @Override
+            public void done(Category category, BmobException e) {
+                if (e == null)
+                    viewHolder.category.setText(category.getName() + "\t");
+            }
+        });
+        new BmobQuery<PaymentMethod>().getObject(bill.getPaymentMethod().getObjectId(), new QueryListener<PaymentMethod>() {
+            @Override
+            public void done(PaymentMethod paymentMethod, BmobException e) {
+                if (e == null)
+                    viewHolder.paymentMethod.setText(paymentMethod.getName() + "\t");
+            }
+        });
         viewHolder.amount.setText("￥" + bill.getAmount());
         viewHolder.title.setText(bill.getTitle());
         return view;
@@ -63,6 +83,7 @@ public class BillAdapter extends ArrayAdapter<Bill> {
         TextView date;
         TextView type;
         TextView category;
+        TextView paymentMethod;
         TextView amount;
         TextView title;
     }
