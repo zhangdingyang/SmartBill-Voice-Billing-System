@@ -35,6 +35,8 @@
         <activity android:name=".Activity.UserLoginPasswordActivity"/>
         <activity android:name=".Activity.UserSignUpPasswordActivity"/>
         <activity android:name=".Activity.BillMainActivity"/>
+        <activity android:name=".Activity.MyCategoryActivity"/>
+        <activity android:name=".Activity.MyPaymentMethodActivity"/>
     </application>
 
 </manifest>

@@ -50,7 +50,7 @@ public class BillHomeFragment extends Fragment {
     List<String> lengthData;
     List<Bill> listData;
 
-    ArrayAdapter<Bill> billArrayAdapter;
+    BillAdapter billAdapter;
     ArrayAdapter lengthAdapter;
 
     String inOrOut;
@@ -70,6 +70,9 @@ public class BillHomeFragment extends Fragment {
         //默认筛选条件
         inOrOut = "in";
         isToday = false;
+
+        //列表初始化
+        initListView();
 
         //收入支出选择初始化
         inOrOutSwitch = getActivity().findViewById(R.id.switch_in_out);
@@ -107,9 +110,6 @@ public class BillHomeFragment extends Fragment {
                 Toast.makeText(getActivity(),"选择时间范围出错",Toast.LENGTH_SHORT).show();
             }
         });
-
-        //列表初始化
-        initListView();
 
         //单击一行数据的事件
         listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
@@ -175,15 +175,14 @@ public class BillHomeFragment extends Fragment {
 
     //列表初始化
     private void initListView() {
-        listData = getBillData(inOrOut, isToday);
-        ArrayAdapter<Bill> adapter = new BillAdapter(getActivity(), R.layout.bill_item, listData);
         listView = getActivity().findViewById(R.id.billListView);
-        listView.setAdapter(adapter);
+        listData = new ArrayList<>();
+        getBillData(inOrOut, isToday);
+
     }
 
     //根据条件查询相应的账本
-    private List<Bill> getBillData(String inOrOut, boolean isToday){
-        final List<Bill> bills = new ArrayList<>();
+    private void getBillData(String inOrOut, boolean isToday){
         Calendar calendar = Calendar.getInstance();
 
         BmobQuery<Bill> bmobQuery = new BmobQuery<Bill>();
@@ -200,7 +199,10 @@ public class BillHomeFragment extends Fragment {
             @Override
             public void done(List<Bill> list, BmobException e) {
                 if (e == null){
-                    bills.addAll(list);
+                    listData.addAll(list);
+
+                    billAdapter = new BillAdapter(getActivity(), R.layout.bill_item, listData);
+                    listView.setAdapter(billAdapter);
                 }
                 else {
                     Toast.makeText(getActivity(),"查询账单出错:" + e.getMessage(),Toast.LENGTH_SHORT).show();
@@ -208,7 +210,6 @@ public class BillHomeFragment extends Fragment {
             }
         });
 
-        return bills;
     }
 
 }
