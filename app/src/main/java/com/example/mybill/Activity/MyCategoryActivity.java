@@ -9,12 +9,16 @@ import android.support.v7.app.AppCompatActivity;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
+import android.widget.Button;
+import android.widget.EditText;
+import android.widget.ImageButton;
 import android.widget.ListView;
 import android.widget.Toast;
 
 import com.example.mybill.Adapter.CategoryAdapter;
 import com.example.mybill.R;
 import com.example.mybill.bean.Category;
+import com.example.mybill.bean.User;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -24,6 +28,7 @@ import cn.bmob.v3.BmobQuery;
 import cn.bmob.v3.BmobUser;
 import cn.bmob.v3.exception.BmobException;
 import cn.bmob.v3.listener.FindListener;
+import cn.bmob.v3.listener.SaveListener;
 import cn.bmob.v3.listener.UpdateListener;
 
 
@@ -36,6 +41,9 @@ public class MyCategoryActivity extends AppCompatActivity {
 
     CategoryAdapter adapter_in;
     CategoryAdapter adapter_out;
+
+    ImageButton btn_add_out;
+    ImageButton btn_add_in;
 
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
@@ -50,7 +58,7 @@ public class MyCategoryActivity extends AppCompatActivity {
         listViewIn.setOnItemLongClickListener(new AdapterView.OnItemLongClickListener() {
             @Override
             public boolean onItemLongClick(AdapterView<?> parent, View view, final int position, long id) {
-                new AlertDialog.Builder(getParent())
+                new AlertDialog.Builder(MyCategoryActivity.this)
                         .setTitle("删除")
                         .setMessage("是否删除该项？")
                         .setPositiveButton("确定", new DialogInterface.OnClickListener() {
@@ -62,10 +70,10 @@ public class MyCategoryActivity extends AppCompatActivity {
                                     @Override
                                     public void done(BmobException e) {
                                         if(e==null){
-                                            Toast.makeText(getParent(),"删除成功",Toast.LENGTH_SHORT).show();
+                                            Toast.makeText(MyCategoryActivity.this,"删除成功",Toast.LENGTH_SHORT).show();
                                             initListView();
                                         }else{
-                                            Toast.makeText(getParent(),"删除失败:" + e.getMessage(),Toast.LENGTH_SHORT).show();
+                                            Toast.makeText(MyCategoryActivity.this,"删除失败:" + e.getMessage(),Toast.LENGTH_SHORT).show();
                                         }
                                     }
                                 });
@@ -74,7 +82,7 @@ public class MyCategoryActivity extends AppCompatActivity {
                         .setNegativeButton("取消", new DialogInterface.OnClickListener() {
                             @Override
                             public void onClick(DialogInterface dialog, int which) {
-                                startActivity(new Intent(getParent(), BillMainActivity.class));
+                                startActivity(new Intent(MyCategoryActivity.this, BillMainActivity.class));
                             }
                         })
                         .show();
@@ -86,7 +94,7 @@ public class MyCategoryActivity extends AppCompatActivity {
         listViewOut.setOnItemLongClickListener(new AdapterView.OnItemLongClickListener() {
             @Override
             public boolean onItemLongClick(AdapterView<?> parent, View view, final int position, long id) {
-                new AlertDialog.Builder(getParent())
+                new AlertDialog.Builder(MyCategoryActivity.this)
                         .setTitle("删除")
                         .setMessage("是否删除该项？")
                         .setPositiveButton("确定", new DialogInterface.OnClickListener() {
@@ -98,10 +106,10 @@ public class MyCategoryActivity extends AppCompatActivity {
                                     @Override
                                     public void done(BmobException e) {
                                         if(e==null){
-                                            Toast.makeText(getParent(),"删除成功",Toast.LENGTH_SHORT).show();
+                                            Toast.makeText(MyCategoryActivity.this,"删除成功",Toast.LENGTH_SHORT).show();
                                             initListView();
                                         }else{
-                                            Toast.makeText(getParent(),"删除失败:" + e.getMessage(),Toast.LENGTH_SHORT).show();
+                                            Toast.makeText(MyCategoryActivity.this,"删除失败:" + e.getMessage(),Toast.LENGTH_SHORT).show();
                                         }
                                     }
                                 });
@@ -110,11 +118,97 @@ public class MyCategoryActivity extends AppCompatActivity {
                         .setNegativeButton("取消", new DialogInterface.OnClickListener() {
                             @Override
                             public void onClick(DialogInterface dialog, int which) {
-                                startActivity(new Intent(getParent(), BillMainActivity.class));
+                                startActivity(new Intent(MyCategoryActivity.this, BillMainActivity.class));
                             }
                         })
                         .show();
                 return false;
+            }
+        });
+
+        //新增支出类别按钮初始化
+        btn_add_out = this.findViewById(R.id.btn_add_out);
+        btn_add_out.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                final EditText name = new EditText(MyCategoryActivity.this);
+                new AlertDialog.Builder(MyCategoryActivity.this)
+                        .setTitle("新增支出类别")
+                        .setView(name)
+                        .setPositiveButton("提交", new DialogInterface.OnClickListener() {
+                            @Override
+                            public void onClick(DialogInterface dialog, int which) {
+                                Category category = new Category();
+                                User currentUser = new User();
+                                currentUser.setObjectId(BmobUser.getCurrentUser().getObjectId());
+                                category.setUserId(currentUser);
+                                category.setType("out");
+                                category.setName(name.getText().toString());
+
+                                category.save(new SaveListener<String>() {
+                                    @Override
+                                    public void done(String s, BmobException e) {
+                                        if(e==null){
+                                            Toast.makeText(MyCategoryActivity.this,"添加数据成功，返回objectId为:" + s,Toast.LENGTH_SHORT).show();
+                                            startActivity(new Intent(MyCategoryActivity.this, MyCategoryActivity.class));
+                                        }else{
+                                            Toast.makeText(MyCategoryActivity.this,"创建数据失败：" + e.getMessage(),Toast.LENGTH_SHORT).show();
+                                            return;
+                                        }
+                                    }
+                                });
+                            }
+                        })
+                        .setNegativeButton("取消", new DialogInterface.OnClickListener() {
+                            @Override
+                            public void onClick(DialogInterface dialog, int which) {
+
+                            }
+                        })
+                        .show();
+            }
+        });
+
+        //新增收入类别按钮初始化
+        btn_add_in = this.findViewById(R.id.btn_add_in);
+        btn_add_in.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                final EditText name = new EditText(MyCategoryActivity.this);
+                new AlertDialog.Builder(MyCategoryActivity.this)
+                        .setTitle("新增收入类别")
+                        .setView(name)
+                        .setPositiveButton("提交", new DialogInterface.OnClickListener() {
+                            @Override
+                            public void onClick(DialogInterface dialog, int which) {
+                                Category category = new Category();
+                                User currentUser = new User();
+                                currentUser.setObjectId(BmobUser.getCurrentUser().getObjectId());
+                                category.setUserId(currentUser);
+                                category.setType("in");
+                                category.setName(name.getText().toString());
+
+                                category.save(new SaveListener<String>() {
+                                    @Override
+                                    public void done(String s, BmobException e) {
+                                        if(e==null){
+                                            Toast.makeText(MyCategoryActivity.this,"添加数据成功，返回objectId为:" + s,Toast.LENGTH_SHORT).show();
+                                            startActivity(new Intent(MyCategoryActivity.this, MyCategoryActivity.class));
+                                        }else{
+                                            Toast.makeText(MyCategoryActivity.this,"创建数据失败：" + e.getMessage(),Toast.LENGTH_SHORT).show();
+                                            return;
+                                        }
+                                    }
+                                });
+                            }
+                        })
+                        .setNegativeButton("取消", new DialogInterface.OnClickListener() {
+                            @Override
+                            public void onClick(DialogInterface dialog, int which) {
+
+                            }
+                        })
+                        .show();
             }
         });
 
@@ -159,7 +253,5 @@ public class MyCategoryActivity extends AppCompatActivity {
                 }
             }
         });
-
     }
-
 }

@@ -9,13 +9,17 @@ import android.support.annotation.Nullable;
 import android.support.v7.app.AppCompatActivity;
 import android.view.View;
 import android.widget.AdapterView;
+import android.widget.EditText;
+import android.widget.ImageButton;
 import android.widget.ListView;
 import android.widget.Toast;
 
 import com.example.mybill.Adapter.PaymentMethodAdapter;
 import com.example.mybill.R;
 import com.example.mybill.bean.Bill;
+import com.example.mybill.bean.Category;
 import com.example.mybill.bean.PaymentMethod;
+import com.example.mybill.bean.User;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -25,6 +29,7 @@ import cn.bmob.v3.BmobQuery;
 import cn.bmob.v3.BmobUser;
 import cn.bmob.v3.exception.BmobException;
 import cn.bmob.v3.listener.FindListener;
+import cn.bmob.v3.listener.SaveListener;
 import cn.bmob.v3.listener.UpdateListener;
 
 
@@ -34,6 +39,8 @@ public class MyPaymentMethodActivity extends AppCompatActivity {
     List<PaymentMethod> listData;
 
     PaymentMethodAdapter paymentMethodAdapter;
+
+    ImageButton btn_add;
 
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
@@ -79,6 +86,48 @@ public class MyPaymentMethodActivity extends AppCompatActivity {
                 return false;
             }
         });
+
+        //新增交易方式按钮初始化
+        btn_add = this.findViewById(R.id.btn_add);
+        btn_add.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                final EditText name = new EditText(MyPaymentMethodActivity.this);
+                new AlertDialog.Builder(MyPaymentMethodActivity.this)
+                        .setTitle("新增交易方式")
+                        .setView(name)
+                        .setPositiveButton("提交", new DialogInterface.OnClickListener() {
+                            @Override
+                            public void onClick(DialogInterface dialog, int which) {
+                                PaymentMethod paymentMethod = new PaymentMethod();
+                                User currentUser = new User();
+                                currentUser.setObjectId(BmobUser.getCurrentUser().getObjectId());
+                                paymentMethod.setUserId(currentUser);
+                                paymentMethod.setName(name.getText().toString());
+
+                                paymentMethod.save(new SaveListener<String>() {
+                                    @Override
+                                    public void done(String s, BmobException e) {
+                                        if(e==null){
+                                            Toast.makeText(MyPaymentMethodActivity.this,"添加数据成功，返回objectId为:" + s,Toast.LENGTH_SHORT).show();
+                                            startActivity(new Intent(MyPaymentMethodActivity.this, MyPaymentMethodActivity.class));
+                                        }else{
+                                            Toast.makeText(MyPaymentMethodActivity.this,"创建数据失败：" + e.getMessage(),Toast.LENGTH_SHORT).show();
+                                            return;
+                                        }
+                                    }
+                                });
+                            }
+                        })
+                        .setNegativeButton("取消", new DialogInterface.OnClickListener() {
+                            @Override
+                            public void onClick(DialogInterface dialog, int which) {
+
+                            }
+                        })
+                        .show();
+            }
+        });
     }
 
     //列表初始化
@@ -101,7 +150,6 @@ public class MyPaymentMethodActivity extends AppCompatActivity {
                 }
             }
         });
-
     }
 
 }
