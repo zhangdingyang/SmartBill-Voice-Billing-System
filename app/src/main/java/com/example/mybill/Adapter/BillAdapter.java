@@ -58,7 +58,10 @@ public class BillAdapter extends ArrayAdapter<Bill> {
 
         // 获取控件实例，并调用set...方法使其显示出来
         viewHolder.date.setText(bill.getDate().getDate().split(" ")[0]);
-        viewHolder.type.setText(bill.getType() + "\t");
+        if (bill.getType().equals("in"))
+            viewHolder.type.setText("收入\t");
+        else if (bill.getType().equals("out"))
+            viewHolder.type.setText("支出\t");
         new BmobQuery<Category>().getObject(bill.getCategoryId().getObjectId(), new QueryListener<Category>() {
             @Override
             public void done(Category category, BmobException e) {

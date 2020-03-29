@@ -53,6 +53,7 @@ public class UserSignUpPasswordActivity extends AppCompatActivity {
             public void done(User user, BmobException e) {
                 if (e == null) {
                     mTvInfo.append("注册成功：" + user.getObjectId());
+                    User.setDefaultCategoryAndPaymentMethod(user.getObjectId());
                     startActivity(new Intent(UserSignUpPasswordActivity.this, MainActivity.class));
                 } else {
                     mTvInfo.append("注册失败：" + e.getMessage());
