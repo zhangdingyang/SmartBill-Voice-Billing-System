@@ -6,6 +6,7 @@ import android.support.v4.app.Fragment;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -13,6 +14,7 @@ import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.CompoundButton;
+import android.widget.ImageButton;
 import android.widget.ListView;
 import android.widget.PopupMenu;
 import android.widget.Spinner;
@@ -21,9 +23,19 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.example.mybill.Adapter.BillAdapter;
+import com.example.mybill.JsonParser;
 import com.example.mybill.R;
 import com.example.mybill.bean.Bill;
+import com.example.mybill.bean.Category;
 import com.example.mybill.bean.PaymentMethod;
+import com.example.mybill.bean.User;
+import com.iflytek.cloud.ErrorCode;
+import com.iflytek.cloud.InitListener;
+import com.iflytek.cloud.RecognizerResult;
+import com.iflytek.cloud.SpeechConstant;
+import com.iflytek.cloud.SpeechError;
+import com.iflytek.cloud.ui.RecognizerDialog;
+import com.iflytek.cloud.ui.RecognizerDialogListener;
 
 import java.util.ArrayList;
 import java.util.Calendar;
@@ -37,7 +49,10 @@ import cn.bmob.v3.datatype.BmobDate;
 import cn.bmob.v3.exception.BmobException;
 import cn.bmob.v3.listener.FindListener;
 import cn.bmob.v3.listener.QueryListener;
+import cn.bmob.v3.listener.SaveListener;
 import cn.bmob.v3.listener.UpdateListener;
+
+import static com.iflytek.cloud.VerifierResult.TAG;
 
 
 public class BillHomeFragment extends Fragment {
@@ -53,7 +68,10 @@ public class BillHomeFragment extends Fragment {
     BillAdapter billAdapter;
     ArrayAdapter lengthAdapter;
 
+    ImageButton btn_speak;
+
     String inOrOut;
+    String speakResultText;
     boolean isToday;
 
     @Nullable
@@ -171,6 +189,127 @@ public class BillHomeFragment extends Fragment {
             }
         });
 
+        //语音按钮事件
+        btn_speak = getActivity().findViewById(R.id.btn_speak);
+        btn_speak.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                RecognizerDialog recognizerDialog = new RecognizerDialog(getActivity(), mInitListener);
+                    recognizerDialog.setParameter(SpeechConstant.LANGUAGE, "zh-cn");
+                    recognizerDialog.setParameter(SpeechConstant.ACCENT, "mandarin");
+                    recognizerDialog.setListener(new RecognizerDialogListener() {
+                        @Override
+                        public void onResult(RecognizerResult recognizerResult, boolean b) {
+                            speakResultText = JsonParser.parseIatResult(recognizerResult.getResultString());
+                            if (!speakResultText.equals("。") && !speakResultText.equals("")){
+                                final Bill newBill = new Bill();
+                                if (speakResultText.contains("年") && speakResultText.contains("月") && speakResultText.contains("日")){
+                                    try {
+                                        int year = Integer.parseInt(speakResultText.substring(speakResultText.indexOf("年")-4, speakResultText.indexOf("年")));
+                                        int month = Integer.parseInt(speakResultText.substring(speakResultText.indexOf("月")-2, speakResultText.indexOf("月")));
+                                        int day = Integer.parseInt(speakResultText.substring(speakResultText.indexOf("日")-2, speakResultText.indexOf("日")));
+                                        newBill.setDate(new BmobDate(new Date(year - 1900, month, day)));
+                                    }catch (Exception e){
+                                        Toast.makeText(getActivity(),"日期不合法。",Toast.LENGTH_SHORT).show();
+                                    }
+                                }
+                                else {
+                                    Toast.makeText(getActivity(),"缺少信息。你没有说出正确的日期。",Toast.LENGTH_SHORT).show();
+                                    return;
+                                }
+                                if (speakResultText.contains("收入"))
+                                    newBill.setType("in");
+                                else if (speakResultText.contains("支出"))
+                                    newBill.setType("out");
+                                else {
+                                    Toast.makeText(getActivity(),"缺少信息。你没有说出收入还是支出。",Toast.LENGTH_SHORT).show();
+                                    return;
+                                }
+                                if (speakResultText.contains("使用")){
+                                    String paymentMethod = speakResultText.substring(speakResultText.indexOf("使用")+2).split("，")[0];
+                                    BmobQuery<PaymentMethod> bmobQuery = new BmobQuery();
+                                    bmobQuery.addWhereEqualTo("userId", BmobUser.getCurrentUser().getObjectId());
+                                    bmobQuery.addWhereEqualTo("name", paymentMethod);
+                                    bmobQuery.findObjects(new FindListener<PaymentMethod>() {
+                                        @Override
+                                        public void done(List<PaymentMethod> list, BmobException e) {
+                                            if (list.size() == 1)
+                                                newBill.setPaymentMethod(list.get(0));
+                                            else
+                                                Toast.makeText(getActivity(),"交易方式不存在。",Toast.LENGTH_SHORT).show();
+                                        }
+                                    });
+                                }
+                                else {
+                                    Toast.makeText(getActivity(),"缺少信息。你没有说出交易方式。",Toast.LENGTH_SHORT).show();
+                                    return;
+                                }
+                                if (speakResultText.contains("类别是")){
+                                    String category = speakResultText.substring(speakResultText.indexOf("类别是")+3).split("，")[0];
+                                    BmobQuery<Category> bmobQuery = new BmobQuery();
+                                    bmobQuery.addWhereEqualTo("userId", BmobUser.getCurrentUser().getObjectId());
+                                    bmobQuery.addWhereEqualTo("name", category);
+                                    bmobQuery.findObjects(new FindListener<Category>() {
+                                        @Override
+                                        public void done(List<Category> list, BmobException e) {
+                                            if (list.size() == 1)
+                                                newBill.setCategoryId(list.get(0));
+                                            else
+                                                Toast.makeText(getActivity(),"交易方式不存在。",Toast.LENGTH_SHORT).show();
+                                        }
+                                    });
+                                }
+                                else {
+                                    Toast.makeText(getActivity(),"缺少信息。你没有说出类别。",Toast.LENGTH_SHORT).show();
+                                    return;
+                                }
+                                if (speakResultText.contains("金额是")){
+                                    try {
+                                        String amount_str = speakResultText.substring(speakResultText.indexOf("金额是")+3).split("元")[0];
+                                        int amount_int = Integer.parseInt(amount_str);
+                                        newBill.setAmount(amount_int);
+                                    }catch (Exception e){
+                                        Toast.makeText(getActivity(),"日期不合法。",Toast.LENGTH_SHORT).show();
+                                    }
+                                }
+                                else {
+                                    Toast.makeText(getActivity(),"缺少信息。你没有说出金额。",Toast.LENGTH_SHORT).show();
+                                    return;
+                                }
+                                if (speakResultText.contains("主题是")){
+                                    String title = speakResultText.substring(speakResultText.indexOf("主题是")+3).split("。")[0];
+                                    newBill.setTitle(title);
+                                }
+                                else {
+                                    Toast.makeText(getActivity(),"缺少信息。你没有说出主题。",Toast.LENGTH_SHORT).show();
+                                    return;
+                                }
+                                User user = new User();
+                                user.setObjectId(BmobUser.getCurrentUser().getObjectId());
+                                newBill.setUserId(user);
+                                newBill.save(new SaveListener<String>() {
+                                    @Override
+                                    public void done(String s, BmobException e) {
+                                        if (e == null){
+                                            Toast.makeText(getActivity(),"添加账单成功：" + s,Toast.LENGTH_SHORT).show();
+                                        }
+                                        else {
+                                            Toast.makeText(getActivity(),"添加账单出错：" + e.getMessage(),Toast.LENGTH_SHORT).show();
+                                        }
+                                    }
+                                });
+                            }
+                        }
+
+                        @Override
+                        public void onError(SpeechError speechError) {
+                            Toast.makeText(getActivity(),"语音识别出错:" + speechError.getMessage(),Toast.LENGTH_SHORT).show();
+                        }
+                    });
+                    recognizerDialog.show();
+            }
+        });
+
     }
 
     //列表初始化
@@ -211,5 +350,19 @@ public class BillHomeFragment extends Fragment {
         });
 
     }
+
+    /**
+     * 初始化语音识别监听器。
+     */
+    private InitListener mInitListener = new InitListener() {
+
+        @Override
+        public void onInit(int code) {
+            Log.d(TAG, "SpeechRecognizer init() code = " + code);
+            if (code != ErrorCode.SUCCESS) {
+                Toast.makeText(getActivity(),"初始化失败，错误码：" + code+",请点击网址https://www.xfyun.cn/document/error-code查询解决方案",Toast.LENGTH_SHORT).show();
+            }
+        }
+    };
 
 }

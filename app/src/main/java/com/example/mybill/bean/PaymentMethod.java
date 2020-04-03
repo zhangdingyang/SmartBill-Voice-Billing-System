@@ -6,6 +6,12 @@ public class PaymentMethod extends BmobObject {
     private String name;
     private User userId;
 
+    public PaymentMethod(){}
+
+    public PaymentMethod(String objectId){
+        this.setObjectId(objectId);
+    }
+
     public String getName() {
         return name;
     }
