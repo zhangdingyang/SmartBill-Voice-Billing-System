@@ -24,6 +24,9 @@ allprojects {
          * bmob SDK 仓库
          */
         maven { url "https://raw.github.com/bmob/bmob-android-sdk/master" }
+
+        //MP-Android 图表工具
+        maven { url 'https://jitpack.io' }
     }
 }
 

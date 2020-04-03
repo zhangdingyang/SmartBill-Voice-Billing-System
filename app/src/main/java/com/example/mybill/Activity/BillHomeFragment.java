@@ -179,7 +179,7 @@ public class BillHomeFragment extends Fragment {
                         .setNegativeButton("取消", new DialogInterface.OnClickListener() {
                             @Override
                             public void onClick(DialogInterface dialog, int which) {
-                                startActivity(new Intent(getActivity(), BillMainActivity.class));
+
                             }
                         })
                         .show();
@@ -326,6 +326,7 @@ public class BillHomeFragment extends Fragment {
 
         BmobQuery<Bill> bmobQuery = new BmobQuery<Bill>();
         bmobQuery.addWhereEqualTo("userId", BmobUser.getCurrentUser().getObjectId());
+        bmobQuery.order("-date");
         if (isToday)
             bmobQuery.addWhereEqualTo("date", new BmobDate(new Date(calendar.get(Calendar.YEAR), calendar.get(Calendar.MONTH), calendar.get(Calendar.DAY_OF_MONTH))));
         else
@@ -338,7 +339,12 @@ public class BillHomeFragment extends Fragment {
             @Override
             public void done(List<Bill> list, BmobException e) {
                 if (e == null){
-                    listData.addAll(list);
+                    if (listData.size() == 0)
+                        listData.addAll(list);
+                    else {
+                        listData.clear();
+                        listData.addAll(list);
+                    }
 
                     billAdapter = new BillAdapter(getActivity(), R.layout.bill_item, listData);
                     listView.setAdapter(billAdapter);
