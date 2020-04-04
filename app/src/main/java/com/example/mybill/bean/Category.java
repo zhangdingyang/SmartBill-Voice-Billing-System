@@ -7,6 +7,12 @@ public class Category extends BmobObject {
     private String type;
     private User userId;
 
+    public Category(){}
+
+    public Category(String categoryId){
+        this.setObjectId(categoryId);
+    }
+
     public String getName() {
         return name;
     }
