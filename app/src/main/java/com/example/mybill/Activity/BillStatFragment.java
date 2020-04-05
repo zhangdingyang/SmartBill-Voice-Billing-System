@@ -46,6 +46,9 @@ public class BillStatFragment extends Fragment {
     private TextView text_income;
     private TextView text_outcome;
     private TextView text_EngelCoefficient;
+    private TextView text_keyword;
+    private TextView text_keyword_comment;
+    private TextView text_suggestion;
 
     private PieChart pieChart_income;
     private PieChart pieChart_outcome;
@@ -57,6 +60,10 @@ public class BillStatFragment extends Fragment {
     private ArrayList<String> categoryName_out;
     private ArrayList<Float> sumAmount_out;
     private float totalAmount_out;
+
+    private float totalIncome;
+    private float totalOutcome;
+    private float engelCoefficient;
 
     @Nullable
     @Override
@@ -72,7 +79,7 @@ public class BillStatFragment extends Fragment {
         //初始化标题行
         text_statTitle = getActivity().findViewById(R.id.text_statTitle);
         String currentUserName = BmobUser.getCurrentUser().getUsername();
-        text_statTitle.setText("尊敬的" + currentUserName + "，您的收入和支出情况已经帮你统计出来啦！");
+        text_statTitle.setText("尊敬的" + currentUserName + "，您的收入和支出情况已经帮你统计出来啦！\n仅有最近一年的数据会被统计");
 
         //获取总收入支出
         text_income = getActivity().findViewById(R.id.text_income);
@@ -210,9 +217,56 @@ public class BillStatFragment extends Fragment {
                 }
             }
         }, BmobUser.getCurrentUser().getObjectId());
+
+
     }
 
-    //获取总收入
+    /**
+     * 分析关键词与给出建议
+     */
+    private void AnalyzeKeyword() {
+        text_keyword = getActivity().findViewById(R.id.text_keyword);
+        text_keyword_comment = getActivity().findViewById(R.id.text_keyword_comment);
+        text_suggestion = getActivity().findViewById(R.id.textView_suggestion);
+
+        if (totalOutcome / totalIncome > 1){
+            text_keyword.setText("啃存款一族");
+            text_keyword_comment.setText("你花的比赚的还多。这样下去养老钱会没的。");
+            if (text_suggestion.getText().equals("继续记账，让我们能够给你建议！"))
+                text_suggestion.setText("");
+            text_suggestion.setText(text_suggestion.getText() + "\n" + "你的花销习惯非常不良，一直在消耗你的存款，这样的日子总有一天会到头的。建议你立即作出消费计划，精简支出。");
+        }
+        if (totalOutcome / totalIncome < 1 && totalOutcome / totalIncome > 0.8){
+            text_keyword.setText("月光族");
+            text_keyword_comment.setText("钱是我的，不花白不花。");
+            if (text_suggestion.getText().equals("继续记账，让我们能够给你建议！"))
+                text_suggestion.setText("");
+            text_suggestion.setText(text_suggestion.getText() + "\n" + "你对你的收入心里很有数，每次都将其花得一干二净。但不要忘记存一些救命钱。");
+        }
+        if (totalOutcome / totalIncome < 0.5){
+            text_keyword.setText("储蓄爱好者");
+            text_keyword_comment.setText("你不喜欢花钱，喜欢把赚的都留着。");
+            if (text_suggestion.getText().equals("继续记账，让我们能够给你建议！"))
+                text_suggestion.setText("");
+            text_suggestion.setText(text_suggestion.getText() + "\n" + "你把你赚的钱大多数都存起来了，是好是坏，看你自己怎么想。");
+        }
+        if (engelCoefficient > 0.5){
+            text_keyword.setText("为下一餐拼搏");
+            text_keyword_comment.setText("你一直在为下一餐能吃上饭而努力。辛苦了，奋斗者。");
+            if (text_suggestion.getText().equals("继续记账，让我们能够给你建议！"))
+                text_suggestion.setText("");
+            text_suggestion.setText(text_suggestion.getText() + "\n" + "很不幸，你还是社会中的底层群众。请一定要继续努力，获得更多的收入。");
+        }
+        if (engelCoefficient < 0.3){
+            text_keyword.setText("小康人士");
+            text_keyword_comment.setText("小康社会，你已经身在其中。");
+            if (text_suggestion.getText().equals("继续记账，让我们能够给你建议！"))
+                text_suggestion.setText("");
+            text_suggestion.setText(text_suggestion.getText() + "\n" + "你的条件比较好，能够做很多自己喜欢的事情。保持下去！");
+        }
+    }
+
+    //获取总收入或支出
     private void getTotalIncomeOrOutcome(final String inOrOut){
         Calendar calendar = Calendar.getInstance();
 
@@ -231,10 +285,14 @@ public class BillStatFragment extends Fragment {
                     for (Bill bill: list){
                         sum = sum + bill.getAmount();
                     }
-                    if (inOrOut.equals("in"))
+                    if (inOrOut.equals("in")){
                         text_income.setText("￥" + sum);
-                    if (inOrOut.equals("out"))
+                        totalIncome = sum;
+                    }
+                    if (inOrOut.equals("out")){
                         text_outcome.setText("￥" + sum);
+                        totalOutcome = sum;
+                    }
                 }
                 else
                     Toast.makeText(getActivity(),"查询账单出错:" + e.getMessage(),Toast.LENGTH_SHORT).show();
@@ -285,6 +343,9 @@ public class BillStatFragment extends Fragment {
                     }
                     float totalOutcome = Float.parseFloat(text_outcome.getText().toString().substring(1));
                     text_EngelCoefficient.setText((sum / totalOutcome * 100) + "%");
+                    engelCoefficient = sum / totalOutcome;
+
+                    AnalyzeKeyword();
                 }
                 else
                     Toast.makeText(getActivity(),"查询账单出错:" + e.getMessage(),Toast.LENGTH_SHORT).show();

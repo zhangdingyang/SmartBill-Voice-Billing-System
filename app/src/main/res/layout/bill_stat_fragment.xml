@@ -27,27 +27,17 @@
                 android:id="@+id/textView7"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginStart="100dp"
-                android:layout_marginTop="24dp"
+                android:layout_marginStart="104dp"
+                android:layout_marginTop="40dp"
                 android:text="总收入"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toTopOf="parent" />
-
-            <TextView
-                android:id="@+id/textView8"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="24dp"
-                android:text="总支出"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toEndOf="@+id/textView7"
                 app:layout_constraintTop_toTopOf="parent" />
 
             <TextView
                 android:id="@+id/text_income"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginStart="56dp"
+                android:layout_marginStart="60dp"
                 android:text="￥0000.00"
                 android:textColor="#FF0000"
                 android:textSize="30sp"
@@ -62,6 +52,7 @@
                 android:textColor="#00FF0D"
                 android:textSize="30sp"
                 app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintHorizontal_bias="0.575"
                 app:layout_constraintStart_toEndOf="@+id/text_income"
                 app:layout_constraintTop_toBottomOf="@+id/textView8" />
 
@@ -71,7 +62,7 @@
                 android:layout_height="5px"
                 android:background="#FF909090"
                 app:layout_constraintTop_toBottomOf="@+id/text_income"
-                tools:layout_editor_absoluteX="3dp"></View>
+                tools:layout_editor_absoluteX="7dp"></View>
 
             <TextView
                 android:id="@+id/textView9"
@@ -79,6 +70,7 @@
                 android:layout_height="wrap_content"
                 android:text="您的总体关键词为"
                 app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintHorizontal_bias="0.523"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/line1" />
 
@@ -90,16 +82,17 @@
                 android:textColor="#C01616"
                 android:textSize="36sp"
                 app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintHorizontal_bias="0.498"
+                app:layout_constraintHorizontal_bias="0.526"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/textView9" />
 
             <TextView
-                android:id="@+id/textView11"
+                android:id="@+id/text_keyword_comment"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="您的数据太神秘了或者太少了。"
                 app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintHorizontal_bias="0.532"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/text_keyword" />
 
@@ -108,8 +101,37 @@
                 android:layout_width="match_parent"
                 android:layout_height="5px"
                 android:background="#FF909090"
-                app:layout_constraintTop_toBottomOf="@+id/textView11"
-                tools:layout_editor_absoluteX="3dp"></View>
+                app:layout_constraintTop_toBottomOf="@+id/text_keyword_comment"
+                tools:layout_editor_absoluteX="7dp"></View>
+
+            <TextView
+                android:id="@+id/textView6"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="智能建议"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/line2" />
+
+            <TextView
+                android:id="@+id/textView_suggestion"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="继续记账，让我们能够给你建议！"
+                android:textColor="#030303"
+                android:textSize="18sp"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/textView6" />
+
+            <View
+                android:id="@+id/line4"
+                android:layout_width="match_parent"
+                android:layout_height="5px"
+                android:layout_marginTop="100dp"
+                android:background="#FF909090"
+                app:layout_constraintTop_toBottomOf="@+id/textView_suggestion"
+                tools:layout_editor_absoluteX="7dp"></View>
 
             <TextView
                 android:id="@+id/textView12"
@@ -117,15 +139,16 @@
                 android:layout_height="wrap_content"
                 android:text="收入支出概况"
                 app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintHorizontal_bias="0.521"
                 app:layout_constraintStart_toStartOf="@+id/line2"
-                app:layout_constraintTop_toBottomOf="@+id/textView11" />
+                app:layout_constraintTop_toBottomOf="@+id/line4" />
 
             <com.github.mikephil.charting.charts.PieChart
                 android:id="@+id/pieChart_income"
                 android:layout_width="300dp"
                 android:layout_height="300dp"
                 app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintHorizontal_bias="0.497"
+                app:layout_constraintHorizontal_bias="0.558"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/textView12" />
 
@@ -133,8 +156,9 @@
                 android:id="@+id/pieChart_outcome"
                 android:layout_width="300dp"
                 android:layout_height="300dp"
+                android:layout_marginTop="4dp"
                 app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintHorizontal_bias="0.497"
+                app:layout_constraintHorizontal_bias="0.558"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/pieChart_income" />
 
@@ -144,7 +168,7 @@
                 android:layout_height="5px"
                 android:background="#FF909090"
                 app:layout_constraintTop_toBottomOf="@+id/pieChart_outcome"
-                tools:layout_editor_absoluteX="3dp"></View>
+                tools:layout_editor_absoluteX="7dp"></View>
 
             <TextView
                 android:id="@+id/textView13"
@@ -152,6 +176,7 @@
                 android:layout_height="wrap_content"
                 android:text="您的恩格尔系数为"
                 app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintHorizontal_bias="0.523"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/line3" />
 
@@ -163,6 +188,7 @@
                 android:textColor="#49CF18"
                 android:textSize="36sp"
                 app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintHorizontal_bias="0.52"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/textView13" />
 
@@ -172,8 +198,20 @@
                 android:layout_height="wrap_content"
                 android:text="超过了当地--.--%的用户"
                 app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintHorizontal_bias="0.526"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/text_EngelCoefficient" />
+
+            <TextView
+                android:id="@+id/textView8"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="40dp"
+                android:text="总支出"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintHorizontal_bias="0.524"
+                app:layout_constraintStart_toEndOf="@+id/textView7"
+                app:layout_constraintTop_toTopOf="parent" />
 
         </android.support.constraint.ConstraintLayout>
     </ScrollView>
