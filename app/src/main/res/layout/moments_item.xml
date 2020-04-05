@@ -1,0 +1,77 @@
+<?xml version="1.0" encoding="utf-8"?>
+<android.support.constraint.ConstraintLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <ImageView
+        android:id="@+id/imageView"
+        android:layout_width="30dp"
+        android:layout_height="30dp"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:srcCompat="@drawable/profile_photo" />
+
+    <TextView
+        android:id="@+id/text_moments_username"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="你附近的土豪"
+        android:textSize="18sp"
+        app:layout_constraintStart_toEndOf="@+id/imageView"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <TextView
+        android:id="@+id/text_moments_comment"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="对方什么也没说"
+        android:textSize="18sp"
+        app:layout_constraintStart_toEndOf="@+id/imageView"
+        app:layout_constraintTop_toBottomOf="@+id/imageView" />
+
+    <android.support.constraint.ConstraintLayout
+        android:id="@+id/constraintLayout"
+        android:layout_width="350dp"
+        android:layout_height="50dp"
+        android:background="#EEE8E8"
+        app:layout_constraintStart_toEndOf="@+id/imageView"
+        app:layout_constraintTop_toBottomOf="@+id/text_moments_comment">
+
+        <TextView
+            android:id="@+id/text_moments_title"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="text_title"
+            android:textSize="24sp"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <TextView
+            android:id="@+id/text_moments_amount"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="text_amount"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/text_moments_title" />
+
+        <TextView
+            android:id="@+id/text_moments_type"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="text_type"
+            app:layout_constraintStart_toEndOf="@+id/text_moments_amount"
+            app:layout_constraintTop_toBottomOf="@+id/text_moments_title" />
+    </android.support.constraint.ConstraintLayout>
+
+    <TextView
+        android:id="@+id/text_moments_createdat"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="XXXX-XX-XX XX:XX:XX"
+        app:layout_constraintStart_toEndOf="@+id/imageView"
+        app:layout_constraintTop_toBottomOf="@+id/constraintLayout" />
+
+</android.support.constraint.ConstraintLayout>

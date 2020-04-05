@@ -10,6 +10,7 @@ import com.example.mybill.bean.User;
 import cn.bmob.v3.BmobUser;
 import cn.bmob.v3.exception.BmobException;
 import cn.bmob.v3.listener.SaveListener;
+import cn.bmob.v3.listener.UpdateListener;
 
 import static cn.bmob.v3.Bmob.getApplicationContext;
 
@@ -35,19 +36,14 @@ public class ResetLocationListener extends BDAbstractLocationListener {
         User currentUser = new User();
         currentUser.setObjectId(BmobUser.getCurrentUser().getObjectId());
         currentUser.setAddress(country + province + city + district);
-        currentUser.save(new SaveListener() {
+        currentUser.update(new UpdateListener() {
             @Override
-            public void done(Object o, BmobException e) {
+            public void done(BmobException e) {
                 if (e == null){
                     Toast.makeText(getApplicationContext(),"修改用户所在地成功。",Toast.LENGTH_SHORT).show();
                 }
                 else
                     Toast.makeText(getApplicationContext(),"修改用户所在地出错：" + e.getMessage(),Toast.LENGTH_SHORT).show();
-            }
-
-            @Override
-            public void done(Object o, Object o2) {
-
             }
         });
     }

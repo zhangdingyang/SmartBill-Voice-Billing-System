@@ -9,14 +9,19 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.baidu.location.LocationClient;
 
 import com.baidu.location.LocationClientOption;
 import com.example.mybill.ResetLocationListener;
 import com.example.mybill.R;
+import com.example.mybill.bean.User;
 
+import cn.bmob.v3.BmobQuery;
 import cn.bmob.v3.BmobUser;
+import cn.bmob.v3.exception.BmobException;
+import cn.bmob.v3.listener.QueryListener;
 
 import static cn.bmob.v3.Bmob.getApplicationContext;
 
@@ -43,7 +48,20 @@ public class BillMeFragment extends Fragment {
         super.onActivityCreated(savedInstanceState);
 
         textView=(TextView)getActivity().findViewById(R.id.textView);
-        textView.setText(textView.getText() + BmobUser.getCurrentUser().getUsername());
+        new BmobQuery<User>().getObject(BmobUser.getCurrentUser().getObjectId(), new QueryListener<User>() {
+            @Override
+            public void done(User user, BmobException e) {
+                if (e == null){
+                    textView.setText("当前用户\n用户名：" + user.getUsername() +
+                            "\n手机号：" + user.getMobilePhoneNumber() +
+                            "\n性别：" + user.getGender() +
+                            "\n所在地：" + user.getAddress());
+                }
+                else
+                    Toast.makeText(getActivity(),"查询用户出错:" + e.getMessage(),Toast.LENGTH_SHORT).show();
+            }
+        });
+
 
         button_exit =(Button)getActivity().findViewById(R.id.btn_exit);
         button_exit.setOnClickListener(new View.OnClickListener() {
@@ -81,6 +99,7 @@ public class BillMeFragment extends Fragment {
                 //注册监听函数
 
                 LocationClientOption option = new LocationClientOption();
+                option.setIsNeedAddress(true);
                 option.setOpenGps(true);
                 option.setScanSpan(0);
 

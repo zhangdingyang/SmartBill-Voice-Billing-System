@@ -7,6 +7,7 @@ public class User extends BmobUser {
 
     private String nickname;
     private String address;
+    private String gender;
 
     public String getNickname() {
         return nickname;
@@ -23,6 +24,14 @@ public class User extends BmobUser {
 
     public void setAddress(String address) {
         this.address = address;
+    }
+
+    public String getGender() {
+        return gender;
+    }
+
+    public void setGender(String gender) {
+        this.gender = gender;
     }
 
     //为新用户创建默认交易方式和类别
