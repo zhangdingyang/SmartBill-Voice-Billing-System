@@ -27,6 +27,13 @@
         android:text="我的交易方式" />
 
     <Button
+        android:id="@+id/btn_resetLocation"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_margin="16dp"
+        android:text="重设用户所在地" />
+
+    <Button
         android:id="@+id/btn_exit"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"

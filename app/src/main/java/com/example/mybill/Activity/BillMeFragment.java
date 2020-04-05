@@ -10,9 +10,15 @@ import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.TextView;
 
+import com.baidu.location.LocationClient;
+
+import com.baidu.location.LocationClientOption;
+import com.example.mybill.ResetLocationListener;
 import com.example.mybill.R;
 
 import cn.bmob.v3.BmobUser;
+
+import static cn.bmob.v3.Bmob.getApplicationContext;
 
 
 public class BillMeFragment extends Fragment {
@@ -20,6 +26,11 @@ public class BillMeFragment extends Fragment {
     private Button button_exit;
     private Button button_myCategory;
     private Button button_myPaymentMethod;
+    private Button button_resetLocation;
+
+    public LocationClient mLocationClient = null;
+    private ResetLocationListener myListener = new ResetLocationListener();
+
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
@@ -56,6 +67,29 @@ public class BillMeFragment extends Fragment {
             @Override
             public void onClick(View v) {
                 startActivity(new Intent(getActivity(), MyPaymentMethodActivity.class));
+            }
+        });
+
+        //重设所在地按钮
+        button_resetLocation = getActivity().findViewById(R.id.btn_resetLocation);
+        button_resetLocation.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                mLocationClient = new LocationClient(getApplicationContext());
+                //声明LocationClient类
+                mLocationClient.registerLocationListener(myListener);
+                //注册监听函数
+
+                LocationClientOption option = new LocationClientOption();
+                option.setOpenGps(true);
+                option.setScanSpan(0);
+
+                mLocationClient.setLocOption(option);
+                //mLocationClient为第二步初始化过的LocationClient对象
+                //需将配置好的LocationClientOption对象，通过setLocOption方法传递给LocationClient对象使用
+                //更多LocationClientOption的配置，请参照类参考中LocationClientOption类的详细说明
+
+                mLocationClient.start();
             }
         });
     }

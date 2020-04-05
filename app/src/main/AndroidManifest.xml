@@ -38,6 +38,13 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme"
         android:networkSecurityConfig="@xml/network_config">
+
+        <meta-data
+            android:name="com.baidu.lbsapi.API_KEY"
+            android:value="Mbt8FDuVqGZpAwrLiaOyKuZAvZAFO8dM" >
+        </meta-data>
+        <service android:name="com.baidu.location.f" android:enabled="true" android:process=":remote"> </service>
+
         <activity android:name=".Activity.MainActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN"/>

@@ -24,6 +24,7 @@ android {
     sourceSets {
         main{
             jniLibs.srcDirs = ['libs']
+            jni.srcDirs = []    //disable automatic ndk-build
         }
     }
 //    packagingOptions {
@@ -52,4 +53,10 @@ dependencies {
 
     //MP-Android
     implementation 'com.github.PhilJay:MPAndroidChart:v3.0.3'
+
+    //BaiduMapSDK
+    compile fileTree(dir:  'libs' , include: ['*.jar'])
+//    androidTestCompile ('com.android.support.test.espresso: espresso-core: 2.2.2', {
+//        exclude group: 'com.android.support',  module: 'support-annotations'
+//    })
 }

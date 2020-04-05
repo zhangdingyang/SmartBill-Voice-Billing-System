@@ -6,6 +6,7 @@ import cn.bmob.v3.datatype.BmobReturn;
 public class User extends BmobUser {
 
     private String nickname;
+    private String address;
 
     public String getNickname() {
         return nickname;
@@ -14,6 +15,14 @@ public class User extends BmobUser {
     public User setNickname(String nickname) {
         this.nickname = nickname;
         return this;
+    }
+
+    public String getAddress() {
+        return address;
+    }
+
+    public void setAddress(String address) {
+        this.address = address;
     }
 
     //为新用户创建默认交易方式和类别
