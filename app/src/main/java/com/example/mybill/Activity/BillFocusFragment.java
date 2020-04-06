@@ -1,5 +1,6 @@
 package com.example.mybill.Activity;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
@@ -7,8 +8,8 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.EditText;
 import android.widget.ListView;
-import android.widget.TextView;
 import android.widget.Toast;
 
 import com.example.mybill.Adapter.MomentsAdapter;
@@ -35,6 +36,9 @@ public class BillFocusFragment extends Fragment {
 
     MomentsAdapter adapter;
 
+    EditText edtSearchUser;
+    Button btnSearchUser;
+
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
@@ -46,6 +50,7 @@ public class BillFocusFragment extends Fragment {
     public void onActivityCreated(@Nullable Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
 
+        edtSearchUser = getActivity().findViewById(R.id.edt_search_user);
         listViewMoments = getActivity().findViewById(R.id.momentsListView);
         listData = new ArrayList<>();
 
@@ -132,6 +137,18 @@ public class BillFocusFragment extends Fragment {
                 }
                 else
                     Toast.makeText(getActivity(),"查询用户关注列表出错:" + e.getMessage(),Toast.LENGTH_SHORT).show();
+            }
+        });
+
+        //搜索用户按钮初始化
+        btnSearchUser = getActivity().findViewById(R.id.btn_search_user);
+        btnSearchUser.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                String searchString = edtSearchUser.getText().toString();
+                Intent intent = new Intent(getActivity(), UserListActivity.class);
+                intent.putExtra("searchString", searchString);
+                startActivity(intent);
             }
         });
 

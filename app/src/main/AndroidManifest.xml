@@ -58,6 +58,7 @@
         <activity android:name=".Activity.BillMainActivity"/>
         <activity android:name=".Activity.MyCategoryActivity"/>
         <activity android:name=".Activity.MyPaymentMethodActivity"/>
+        <activity android:name=".Activity.UserListActivity"/>
     </application>
 
 </manifest>

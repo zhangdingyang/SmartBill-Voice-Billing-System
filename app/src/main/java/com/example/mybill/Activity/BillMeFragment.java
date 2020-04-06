@@ -48,19 +48,7 @@ public class BillMeFragment extends Fragment {
         super.onActivityCreated(savedInstanceState);
 
         textView=(TextView)getActivity().findViewById(R.id.textView);
-        new BmobQuery<User>().getObject(BmobUser.getCurrentUser().getObjectId(), new QueryListener<User>() {
-            @Override
-            public void done(User user, BmobException e) {
-                if (e == null){
-                    textView.setText("当前用户\n用户名：" + user.getUsername() +
-                            "\n手机号：" + user.getMobilePhoneNumber() +
-                            "\n性别：" + user.getGender() +
-                            "\n所在地：" + user.getAddress());
-                }
-                else
-                    Toast.makeText(getActivity(),"查询用户出错:" + e.getMessage(),Toast.LENGTH_SHORT).show();
-            }
-        });
+        setUserInfo();
 
 
         button_exit =(Button)getActivity().findViewById(R.id.btn_exit);
@@ -109,6 +97,25 @@ public class BillMeFragment extends Fragment {
                 //更多LocationClientOption的配置，请参照类参考中LocationClientOption类的详细说明
 
                 mLocationClient.start();
+            }
+        });
+    }
+
+    /**
+     * 加载用户信息
+     */
+    public void setUserInfo() {
+        new BmobQuery<User>().getObject(BmobUser.getCurrentUser().getObjectId(), new QueryListener<User>() {
+            @Override
+            public void done(User user, BmobException e) {
+                if (e == null){
+                    textView.setText("当前用户\n用户名：" + user.getUsername() +
+                            "\n手机号：" + user.getMobilePhoneNumber() +
+                            "\n性别：" + user.getGender() +
+                            "\n所在地：" + user.getAddress());
+                }
+                else
+                    Toast.makeText(getActivity(),"查询用户出错:" + e.getMessage(),Toast.LENGTH_SHORT).show();
             }
         });
     }

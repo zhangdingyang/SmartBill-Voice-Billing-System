@@ -4,12 +4,11 @@ import android.widget.Toast;
 
 import com.baidu.location.BDAbstractLocationListener;
 import com.baidu.location.BDLocation;
-import com.example.mybill.Activity.BillMainActivity;
+import com.example.mybill.Activity.BillMeFragment;
 import com.example.mybill.bean.User;
 
 import cn.bmob.v3.BmobUser;
 import cn.bmob.v3.exception.BmobException;
-import cn.bmob.v3.listener.SaveListener;
 import cn.bmob.v3.listener.UpdateListener;
 
 import static cn.bmob.v3.Bmob.getApplicationContext;
