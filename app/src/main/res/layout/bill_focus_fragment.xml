@@ -11,7 +11,7 @@
         android:id="@+id/edt_search"
         android:layout_width="300dp"
         android:layout_height="wrap_content"
-        android:hint="输入用户名搜索"
+        android:hint="输入用户名搜索以关注或取关"
         android:inputType="text"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />

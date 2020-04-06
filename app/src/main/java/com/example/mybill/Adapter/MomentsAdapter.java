@@ -51,7 +51,7 @@ public class MomentsAdapter extends ArrayAdapter<Moments> {
 
         // 获取控件实例，并调用set...方法使其显示出来
         if (!moments.getUserName().equals("附近用户"))
-            viewHolder.userName.setText(moments.getUserName());
+            viewHolder.userName.setText("你关注的用户：" + moments.getUserName());
         else
             viewHolder.userName.setText("你附近某土豪大手一挥");
         if (moments.getType().equals("in"))

@@ -5,18 +5,8 @@ import cn.bmob.v3.datatype.BmobReturn;
 
 public class User extends BmobUser {
 
-    private String nickname;
     private String address;
     private String gender;
-
-    public String getNickname() {
-        return nickname;
-    }
-
-    public User setNickname(String nickname) {
-        this.nickname = nickname;
-        return this;
-    }
 
     public String getAddress() {
         return address;
