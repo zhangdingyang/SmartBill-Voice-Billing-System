@@ -4,14 +4,22 @@ import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.design.widget.BottomNavigationView;
+import android.support.design.widget.Snackbar;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentTransaction;
 import android.support.v7.app.AppCompatActivity;
+import android.util.Log;
 import android.view.MenuItem;
+import android.view.View;
+import android.widget.Toast;
 
 import com.example.mybill.R;
+import com.example.mybill.bean.User;
 
 import butterknife.ButterKnife;
+import cn.bmob.v3.BmobUser;
+import cn.bmob.v3.exception.BmobException;
+import cn.bmob.v3.listener.FetchUserInfoListener;
 
 public class BillMainActivity extends AppCompatActivity {
     private BottomNavigationView bottomNavigationView;
@@ -29,6 +37,7 @@ public class BillMainActivity extends AppCompatActivity {
         setContentView(R.layout.activity_bill_main);
         ButterKnife.bind(this);
         initFragment();
+        fetchUserInfo();
     }
 
     private void initFragment()
@@ -117,4 +126,21 @@ public class BillMainActivity extends AppCompatActivity {
 
     }
 
+    /**
+     * 同步控制台数据到缓存中
+     */
+    private void fetchUserInfo() {
+        BmobUser.fetchUserInfo(new FetchUserInfoListener<BmobUser>() {
+            @Override
+            public void done(BmobUser user, BmobException e) {
+                if (e == null) {
+                    final User myUser = BmobUser.getCurrentUser(User.class);
+                    Toast.makeText(BillMainActivity.this,"更新用户本地缓存信息成功："+myUser.getUsername(),Toast.LENGTH_SHORT).show();
+                } else {
+                    Log.e("error",e.getMessage());
+                    Toast.makeText(BillMainActivity.this,"更新用户本地缓存信息失败：" + e.getMessage(),Toast.LENGTH_SHORT).show();
+                }
+            }
+        });
+    }
 }

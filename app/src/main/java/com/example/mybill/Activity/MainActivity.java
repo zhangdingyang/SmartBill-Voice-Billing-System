@@ -7,6 +7,7 @@ import android.support.v7.app.AppCompatActivity;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
 import cn.bmob.v3.Bmob;
+import cn.bmob.v3.BmobUser;
 
 import android.os.Bundle;
 import android.view.View;
@@ -21,6 +22,11 @@ public class MainActivity extends AppCompatActivity {
         setContentView(R.layout.activity_main);
         ButterKnife.bind(this);
         Bmob.initialize(this,"8915f79c08da038d8b396e10a000abf2");
+
+        //增加判断，若缓存中有用户信息则无需重新登录
+        if (BmobUser.getCurrentUser() != null){
+            startActivity(new Intent(MainActivity.this, BillMainActivity.class));
+        }
     }
 
     @OnClick({R.id.btn_user_signup_password, R.id.btn_signup_or_login_sms, R.id.btn_user_login_password})
