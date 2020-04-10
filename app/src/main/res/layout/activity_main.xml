@@ -2,20 +2,32 @@
 <android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
-    android:id="@+id/linearLayout"
+    android:id="@+id/constraintLayout"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:background="@drawable/welcome_background"
     tools:context=".Activity.MainActivity">
+
+    <ImageView
+        android:id="@+id/imageView3"
+        android:layout_width="82dp"
+        android:layout_height="62dp"
+        android:layout_marginTop="10dp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:srcCompat="@drawable/logo_mybill" />
 
     <TextView
         android:id="@+id/textView2"
-        android:layout_width="186dp"
+        android:layout_width="wrap_content"
         android:layout_height="0dp"
         android:layout_marginStart="8dp"
-        android:layout_marginTop="6dp"
+        android:layout_marginTop="340dp"
         android:layout_marginEnd="8dp"
         android:text="欢迎来到MyBill"
-        android:textSize="24sp"
+        android:textColor="#F8F2F8"
+        android:textSize="30sp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
@@ -24,18 +36,28 @@
         android:id="@+id/btn_user_signup_password"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:text="用户名密码注册"
-        app:layout_constraintBottom_toTopOf="@+id/btn_signup_or_login_sms"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent" />
+        android:text="注册（密码）"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toStartOf="@+id/btn_user_login_password" />
 
 
     <Button
         android:id="@+id/btn_signup_or_login_sms"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:text="验证手机号码注册或登录"
-        app:layout_constraintBottom_toTopOf="@+id/btn_user_login_password"
+        android:text="手机号一键登录"
+        android:textSize="24sp"
+        app:layout_constraintBottom_toTopOf="@+id/btn_signup_sms"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent" />
+
+    <Button
+        android:id="@+id/btn_signup_sms"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:text="手机号一键注册"
+        android:textSize="24sp"
+        app:layout_constraintBottom_toTopOf="@+id/btn_user_signup_password"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent" />
 
@@ -43,9 +65,8 @@
         android:id="@+id/btn_user_login_password"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:text="用户名密码登录"
+        android:text="登录（密码）"
         app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent" />
+        app:layout_constraintEnd_toEndOf="parent" />
 
 </android.support.constraint.ConstraintLayout>

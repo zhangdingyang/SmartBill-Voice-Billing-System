@@ -72,14 +72,14 @@ public class UserSignUpOrLoginSmsActivity extends AppCompatActivity {
                     Toast.makeText(this, "请输入验证码", Toast.LENGTH_SHORT).show();
                     return;
                 }
-                BmobUser.signOrLoginByMobilePhone(phone, code, new LogInListener<BmobUser>() {
+                BmobUser.loginBySMSCode(phone, code, new LogInListener<BmobUser>() {
                     @Override
                     public void done(BmobUser bmobUser, BmobException e) {
                         if (e == null) {
-                            mTvInfo.append("短信注册或登录成功：" + bmobUser.getUsername());
+                            mTvInfo.append("短信登录成功：" + bmobUser.getUsername());
                             startActivity(new Intent(UserSignUpOrLoginSmsActivity.this, BillMainActivity.class));
                         } else {
-                            mTvInfo.append("短信注册或登录失败：" + e.getErrorCode() + "-" + e.getMessage() + "\n");
+                            mTvInfo.append("短信登录失败：" + e.getErrorCode() + "-" + e.getMessage() + "\n");
                         }
                     }
                 });
