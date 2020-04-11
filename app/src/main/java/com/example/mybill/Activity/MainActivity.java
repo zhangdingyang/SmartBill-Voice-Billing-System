@@ -29,14 +29,14 @@ public class MainActivity extends AppCompatActivity {
         }
     }
 
-    @OnClick({R.id.btn_user_signup_password, R.id.btn_signup_or_login_sms, R.id.btn_user_login_password})
+    @OnClick({R.id.btn_signup_sms, R.id.btn_login_sms, R.id.btn_user_login_password})
     public void onViewClicked(View view) {
         switch (view.getId()) {
-            case R.id.btn_user_signup_password:
-                startActivity(new Intent(this, UserSignUpPasswordActivity.class));
+            case R.id.btn_signup_sms:
+                startActivity(new Intent(this, UserSignUpPasswordAndSmsActivity.class));
                 break;
-            case R.id.btn_signup_or_login_sms:
-                startActivity(new Intent(this, UserSignUpOrLoginSmsActivity.class));
+            case R.id.btn_login_sms:
+                startActivity(new Intent(this, UserLoginSmsActivity.class));
                 break;
             case R.id.btn_user_login_password:
                 startActivity(new Intent(this, UserLoginPasswordActivity.class));

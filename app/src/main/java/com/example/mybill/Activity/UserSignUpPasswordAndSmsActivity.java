@@ -11,6 +11,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.example.mybill.R;
+import com.example.mybill.bean.User;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -18,12 +19,15 @@ import butterknife.OnClick;
 import cn.bmob.v3.BmobSMS;
 import cn.bmob.v3.BmobUser;
 import cn.bmob.v3.exception.BmobException;
-import cn.bmob.v3.listener.LogInListener;
 import cn.bmob.v3.listener.QueryListener;
+import cn.bmob.v3.listener.SaveListener;
 
-public class UserSignUpOrLoginSmsActivity extends AppCompatActivity {
+public class UserSignUpPasswordAndSmsActivity extends AppCompatActivity{
 
-
+    @BindView(R.id.edt_username)
+    EditText mEdtUsername;
+    @BindView(R.id.edt_password)
+    EditText mEdtPassword;
     @BindView(R.id.edt_phone)
     EditText mEdtPhone;
     @BindView(R.id.edt_code)
@@ -34,13 +38,13 @@ public class UserSignUpOrLoginSmsActivity extends AppCompatActivity {
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_user_signup_or_login_sms);
+        setContentView(R.layout.activity_user_signup_password_and_sms);
         ButterKnife.bind(this);
-
     }
 
 
-    @OnClick({R.id.btn_send, R.id.btn_signup_or_login})
+
+    @OnClick({R.id.btn_send, R.id.btn_signup})
     public void onViewClicked(View view) {
         switch (view.getId()) {
             case R.id.btn_send: {
@@ -61,7 +65,17 @@ public class UserSignUpOrLoginSmsActivity extends AppCompatActivity {
                 });
                 break;
             }
-            case R.id.btn_signup_or_login: {
+            case R.id.btn_signup: {
+                String username = mEdtUsername.getText().toString().trim();
+                if (TextUtils.isEmpty(username)) {
+                    Toast.makeText(this, "请输入用户名", Toast.LENGTH_SHORT).show();
+                    return;
+                }
+                String password = mEdtPassword.getText().toString().trim();
+                if (TextUtils.isEmpty(password)) {
+                    Toast.makeText(this, "请输入密码", Toast.LENGTH_SHORT).show();
+                    return;
+                }
                 String phone = mEdtPhone.getText().toString().trim();
                 if (TextUtils.isEmpty(phone)) {
                     Toast.makeText(this, "请输入手机号码", Toast.LENGTH_SHORT).show();
@@ -72,20 +86,24 @@ public class UserSignUpOrLoginSmsActivity extends AppCompatActivity {
                     Toast.makeText(this, "请输入验证码", Toast.LENGTH_SHORT).show();
                     return;
                 }
-                BmobUser.loginBySMSCode(phone, code, new LogInListener<BmobUser>() {
+                User user = new User();
+                user.setMobilePhoneNumber(phone);
+                user.setUsername(username);
+                user.setPassword(password);
+                user.signOrLogin(code, new SaveListener<BmobUser>() {
                     @Override
                     public void done(BmobUser bmobUser, BmobException e) {
                         if (e == null) {
-                            mTvInfo.append("短信登录成功：" + bmobUser.getUsername());
-                            startActivity(new Intent(UserSignUpOrLoginSmsActivity.this, BillMainActivity.class));
+                            mTvInfo.append("短信注册成功：" + bmobUser.getUsername());
+                            User.setDefaultCategoryAndPaymentMethod(bmobUser.getObjectId());
+                            startActivity(new Intent(UserSignUpPasswordAndSmsActivity.this, BillMainActivity.class));
                         } else {
-                            mTvInfo.append("短信登录失败：" + e.getErrorCode() + "-" + e.getMessage() + "\n");
+                            mTvInfo.append("短信注册失败：" + e.getErrorCode() + "-" + e.getMessage() + "\n");
                         }
                     }
                 });
                 break;
             }
-
             default:
                 break;
         }
