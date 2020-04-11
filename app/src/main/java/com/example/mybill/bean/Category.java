@@ -6,6 +6,7 @@ public class Category extends BmobObject {
     private String name;
     private String type;
     private User userId;
+    private Boolean isDeleted;
 
     public Category(){}
 
@@ -35,5 +36,13 @@ public class Category extends BmobObject {
 
     public void setUserId(User userId) {
         this.userId = userId;
+    }
+
+    public boolean isDeleted() {
+        return isDeleted;
+    }
+
+    public void setDeleted(boolean deleted) {
+        isDeleted = deleted;
     }
 }

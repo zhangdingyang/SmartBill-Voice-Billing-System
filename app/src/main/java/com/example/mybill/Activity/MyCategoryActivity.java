@@ -66,7 +66,8 @@ public class MyCategoryActivity extends AppCompatActivity {
                             public void onClick(DialogInterface dialog, int which) {
                                 Category category = new Category();
                                 category.setObjectId(listInData.get(position).getObjectId());
-                                category.delete(new UpdateListener() {
+                                category.setDeleted(true);
+                                category.update(new UpdateListener() {
                                     @Override
                                     public void done(BmobException e) {
                                         if(e==null){
@@ -102,7 +103,8 @@ public class MyCategoryActivity extends AppCompatActivity {
                             public void onClick(DialogInterface dialog, int which) {
                                 Category category = new Category();
                                 category.setObjectId(listOutData.get(position).getObjectId());
-                                category.delete(new UpdateListener() {
+                                category.setDeleted(true);
+                                category.update(new UpdateListener() {
                                     @Override
                                     public void done(BmobException e) {
                                         if(e==null){
@@ -143,6 +145,7 @@ public class MyCategoryActivity extends AppCompatActivity {
                                 currentUser.setObjectId(BmobUser.getCurrentUser().getObjectId());
                                 category.setUserId(currentUser);
                                 category.setType("out");
+                                category.setDeleted(false);
                                 category.setName(name.getText().toString());
 
                                 category.save(new SaveListener<String>() {
@@ -187,6 +190,7 @@ public class MyCategoryActivity extends AppCompatActivity {
                                 category.setUserId(currentUser);
                                 category.setType("in");
                                 category.setName(name.getText().toString());
+                                category.setDeleted(false);
 
                                 category.save(new SaveListener<String>() {
                                     @Override
@@ -229,6 +233,7 @@ public class MyCategoryActivity extends AppCompatActivity {
     private void getCategoryData(final String inOrOut){
         final BmobQuery<Category> bmobQuery = new BmobQuery<Category>();
         bmobQuery.addWhereEqualTo("userId", BmobUser.getCurrentUser().getObjectId());
+        bmobQuery.addWhereEqualTo("isDeleted", false);
         if (inOrOut.equals("out"))
             bmobQuery.addWhereEqualTo("type", "out");
         else if (inOrOut.equals("in"))

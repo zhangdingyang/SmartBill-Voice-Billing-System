@@ -5,6 +5,7 @@ import cn.bmob.v3.BmobObject;
 public class PaymentMethod extends BmobObject {
     private String name;
     private User userId;
+    private Boolean isDeleted;
 
     public PaymentMethod(){}
 
@@ -26,5 +27,13 @@ public class PaymentMethod extends BmobObject {
 
     public void setUserId(User userId) {
         this.userId = userId;
+    }
+
+    public Boolean getDeleted() {
+        return isDeleted;
+    }
+
+    public void setDeleted(Boolean deleted) {
+        isDeleted = deleted;
     }
 }

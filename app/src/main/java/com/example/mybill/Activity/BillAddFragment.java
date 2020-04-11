@@ -124,6 +124,7 @@ public class BillAddFragment extends Fragment{
         paymentMethodData.add("请选择交易方式");
         BmobQuery<PaymentMethod> paymentMethodBmobQuery = new BmobQuery<PaymentMethod>();
         paymentMethodBmobQuery.addWhereEqualTo("userId", BmobUser.getCurrentUser().getObjectId());
+        paymentMethodBmobQuery.addWhereEqualTo("isDeleted", false);
         paymentMethodBmobQuery.findObjects(new FindListener<PaymentMethod>() {
             @Override
             public void done(List<PaymentMethod> list, BmobException e) {
@@ -161,6 +162,7 @@ public class BillAddFragment extends Fragment{
         categoryData.add("请选择类别");
         BmobQuery<Category> categoryBmobQuery = new BmobQuery<Category>();
         categoryBmobQuery.addWhereEqualTo("userId", BmobUser.getCurrentUser().getObjectId());
+        categoryBmobQuery.addWhereEqualTo("isDeleted", false);
         categoryBmobQuery.findObjects(new FindListener<Category>() {
             @Override
             public void done(List<Category> list, BmobException e) {

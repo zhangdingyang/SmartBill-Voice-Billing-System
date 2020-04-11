@@ -63,7 +63,8 @@ public class MyPaymentMethodActivity extends AppCompatActivity {
                             public void onClick(DialogInterface dialog, int which) {
                                 PaymentMethod paymentMethod = new PaymentMethod();
                                 paymentMethod.setObjectId(listData.get(position).getObjectId());
-                                paymentMethod.delete(new UpdateListener() {
+                                paymentMethod.setDeleted(true);
+                                paymentMethod.update(new UpdateListener() {
                                     @Override
                                     public void done(BmobException e) {
                                         if(e==null){
@@ -104,6 +105,7 @@ public class MyPaymentMethodActivity extends AppCompatActivity {
                                 currentUser.setObjectId(BmobUser.getCurrentUser().getObjectId());
                                 paymentMethod.setUserId(currentUser);
                                 paymentMethod.setName(name.getText().toString());
+                                paymentMethod.setDeleted(false);
 
                                 paymentMethod.save(new SaveListener<String>() {
                                     @Override
@@ -136,6 +138,7 @@ public class MyPaymentMethodActivity extends AppCompatActivity {
         listView = MyPaymentMethodActivity.this.findViewById(R.id.paymentMethodListView);
         BmobQuery<PaymentMethod> bmobQuery = new BmobQuery<PaymentMethod>();
         bmobQuery.addWhereEqualTo("userId", BmobUser.getCurrentUser().getObjectId());
+        bmobQuery.addWhereEqualTo("isDeleted", false);
         bmobQuery.findObjects(new FindListener<PaymentMethod>() {
             @Override
             public void done(List<PaymentMethod> list, BmobException e) {
