@@ -6,6 +6,7 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
+import android.support.v4.widget.SwipeRefreshLayout;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -37,6 +38,8 @@ public class BillMeFragment extends Fragment {
     private Button button_myPaymentMethod;
     private Button button_resetLocation;
     private Button button_resetGender;
+
+    private SwipeRefreshLayout swipe;
 
     public LocationClient mLocationClient = null;
     private ResetLocationListener myListener = new ResetLocationListener();
@@ -150,6 +153,17 @@ public class BillMeFragment extends Fragment {
                             }
                         })
                         .show();
+            }
+        });
+
+        //设置下拉刷新
+        swipe = getActivity().findViewById(R.id.swipe);
+        swipe.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
+            @Override
+            public void onRefresh() {
+                setUserInfo();
+                Toast.makeText(getActivity(),"刷新成功",Toast.LENGTH_SHORT).show();
+                swipe.setRefreshing(false);
             }
         });
     }

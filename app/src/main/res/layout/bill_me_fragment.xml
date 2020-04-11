@@ -23,13 +23,19 @@
                 app:layout_constraintTop_toTopOf="parent"
                 app:srcCompat="@drawable/profile_photo" />
 
-            <TextView
-                android:id="@+id/textView"
+            <android.support.v4.widget.SwipeRefreshLayout
+                android:id="@+id/swipe"
                 android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:text="当前登录账户：\n手机号：\n性别：\n所在地："
+                android:layout_height="100dp"
                 app:layout_constraintStart_toEndOf="@+id/imageView4"
-                app:layout_constraintTop_toTopOf="parent" />
+                app:layout_constraintTop_toTopOf="parent">
+
+                <TextView
+                    android:id="@+id/textView"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:text="当前登录账户：\n手机号：\n性别：\n所在地：" />
+            </android.support.v4.widget.SwipeRefreshLayout>
 
             <Button
                 android:id="@+id/btn_exit"
